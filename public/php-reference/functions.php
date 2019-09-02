@@ -55,7 +55,7 @@ EOT;
 
 function get_public_header()
 {
-    $category = run_query('','');
+    $category = run_query('select * from tblcategories', '');
     $p_urls = public_urls();
     $p_assets = public_assets();
     $p_header = <<<EOT
@@ -82,39 +82,41 @@ function get_public_header()
                         <li class="menu-active"><a href="{$p_urls}">Home</a></li>
                         <li class="menu-has-children"><a href="">Sports</a>
                             <ul>
-EOT; 
-echo $p_header;
-
-foreach($category as $ca){
-    echo <<<EOT 
-    <li><a href="{$p_urls}public/pages/category.php">Standard Post</a></li> 
 EOT;
-}
+    echo $p_header;
+    $cate = '';
+    foreach ($category as $cat) {
 
+      $cate = $cat['name'];  
 
-echo <<<EOT                                
+        echo <<<EOT
+        <li><a href="{$p_urls}public/pages/category.php">{$cate}</a></li> 
+EOT;
+    }
+
+    echo "                                
                         </ul>
                         </li>
-                        <li><a href="{$p_urls}public/pages/about.php">About</a></li>
-                        <li><a href="{$p_urls}public/pages/contact.php">Contact</a></li>
+                        <li><a href='{$p_urls}public/pages/about.php'>About</a></li>
+                        <li><a href='{$p_urls}public/pages/contact.php'>Contact</a></li>
                     </ul>
                 </nav><!-- #nav-menu-container -->
-                <div class="navbar-right">
-                    <form class="Search">
-                        <input type="text" class="form-control Search-box" name="Search-box" id="Search-box"
-                            placeholder="Search">
-                        <label for="Search-box" class="Search-box-label">
-                            <span class="lnr lnr-magnifier"></span>
+                <div class='navbar-right'>
+                    <form class='Search'>
+                        <input type='text' class='form-control Search-box' name='Search-box' id='Search-box'
+                            placeholder='Search'>
+                        <label for='Search-box' class='Search-box-label'>
+                            <span class='lnr lnr-magnifier'></span>
                         </label>
-                        <span class="Search-close">
-                            <span class="lnr lnr-cross"></span>
+                        <span class='Search-close'>
+                            <span class='lnr lnr-cross'></span>
                         </span>
                     </form>
                 </div>
             </div>
         </div>
     </header>
-EOT;
+";
 }
 
 function get_public_footer()
@@ -241,10 +243,10 @@ function get_public_latestPost()
                             <h4 class="cat-title">Latest News</h4>
 EOT;
     echo $latest_post;
-    $i=0;
+    $i = 0;
     foreach ($news as $n) {
         $title =  $n['tblnews.title'];
-        $sh_desc =  substr($n['tblnews.short_descript'],0,300);
+        $sh_desc =  substr($n['tblnews.short_descript'], 0, 300);
         $featured_img = $n['tblnews.featured_image'];
         $user = $n['tbluser.username'];
         echo <<<EOT
@@ -274,11 +276,13 @@ EOT;
                                 </div>
                             </div>
 EOT;
- $i++; if($i==5) break;  }
-echo "</div>";
-foreach($news as $ns){
-    echo $n['tblnews.title'].'<br>';
-    echo substr($n['tblnews.short_descript'],0,300).'<br>';
-    echo $n['tbluser.username'].'<br>';
-}
+        $i++;
+        if ($i == 5) break;
+    }
+    echo "</div>";
+    // foreach ($news as $ns) {
+    //     echo $n['tblnews.title'] . '<br>';
+    //     echo substr($n['tblnews.short_descript'], 0, 300) . '<br>';
+    //     echo $n['tbluser.username'] . '<br>';
+    // }
 }
