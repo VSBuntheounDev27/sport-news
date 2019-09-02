@@ -85,7 +85,6 @@ include 'template/header.php';
         <!-- ./col -->
     </div>
     <!-- /.row -->
-</div>
 </section>
 
 <?php
