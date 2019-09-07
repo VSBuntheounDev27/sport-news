@@ -86,11 +86,11 @@ EOT;
     echo $p_header;
     $cate = '';
     foreach ($category as $cat) {
-
+        $id = $cat['id'];
       $cate = $cat['name'];  
-
+      
         echo <<<EOT
-        <li><a href="{$p_urls}public/pages/category.php">{$cate}</a></li> 
+        <li><a href="{$p_urls}public/pages/category.php?id={$id}">{$cate}</a></li> 
 EOT;
     }
 
@@ -234,7 +234,7 @@ EOT;
 
 function get_public_latestPost()
 {
-    $news = run_query("select tblnews.title,tblnews.short_descript,tblnews.featured_image,tbluser.username,tblcategories.name from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id", "Error 404!");
+    $news = run_query("select tblnews.title, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id", "Error 404!");
     $p_urls = public_urls();
     $p_assets = public_assets();
     $latest_post = <<<EOT
@@ -245,10 +245,12 @@ EOT;
     echo $latest_post;
     $i = 0;
     foreach ($news as $n) {
-        $title =  $n['tblnews.title'];
-        $sh_desc =  substr($n['tblnews.short_descript'], 0, 300);
-        $featured_img = $n['tblnews.featured_image'];
-        $user = $n['tbluser.username'];
+        $title =  $n['title'];
+        $sh_desc =  substr($n['short_descript'], 0, 300);
+        $featured_img = $n['featured_image'];
+        $user = $n['username'];
+        $category = $n['name'];
+        $date = $n['create_at'];
         echo <<<EOT
     <div class="single-latest-post row align-items-center">
                                 <div class="col-lg-5 post-left">
@@ -257,7 +259,7 @@ EOT;
                                         <img class="img-fluid" src="{$featured_img}" alt="">
                                     </div>
                                     <ul class="tags">
-                                        <li><a href="#">Lifestyle</a></li>
+                                        <li><a href="#">{$category}</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-lg-7 post-right">
@@ -266,7 +268,7 @@ EOT;
                                     </a>
                                     <ul class="meta">
                                         <li><a href="#"><span class="lnr lnr-user"></span>{$user}</a></li>
-                                        <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a>
+                                        <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$date}</a>
                                         </li>
                                         <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
                                     </ul>

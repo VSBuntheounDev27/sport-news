@@ -1,6 +1,8 @@
 <?php
 include '../../config.php';
 include '../../public/php-reference/functions.php';
+include '../../resource/db-functions/transaction-db.php';
+
 ?>
 <?php include '../template/p-header.php'; ?>
 

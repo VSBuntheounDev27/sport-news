@@ -1,8 +1,15 @@
 <?php
 include '../../config.php';
 include '../../public/php-reference/functions.php';
+include '../../resource/db-functions/transaction-db.php';
+
 ?>
 <?php include '../template/p-header.php'; ?>
+
+<?php 
+	run_query('',''); 
+?>
+
 
 <div class="site-main-container">
 	<!-- Start top-post Area -->
