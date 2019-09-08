@@ -252,28 +252,27 @@ function get_public_topPostArea()
 EOT;
     echo $top_post_area;
     $i = 0;
-    $news = run_query("select tblnews.title, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id ORDER BY tblnews.view DESC", "Error 404!");
+    $news = run_query("select tblnews.title,tblnews.view, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id ORDER BY tblnews.view DESC", "Error 404!");
     foreach ($news as $n) {
 
         $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
-        // echo $new[$i]->getTitle().'<br>'.$new[$i]->getCate_name().'<br>';
         echo <<<EOT
         <div class="col-lg-8 top-post-left">
         <div class="feature-image-thumb relative">
             <div class="overlay overlay-bg"></div>
-            <img class="img-fluid" src="{$p_assets}img/top-post1.jpg" alt="">
+            <img class="img-fluid" src="{$new->getFeatured_img()}" alt="">
         </div>
         <div class="top-post-details">
             <ul class="tags">
-                <li><a href="#">Food Habit</a></li>
+                <li><a href="#">{$new->getCate_name()}</a></li>
             </ul>
             <a href="image-post.html">
-                <h3>A Discount Toner Cartridge Is Better Than Ever.</h3>
+                <h3>{$new->getTitle()}</h3>
             </a>
             <ul class="meta">
-                <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-                <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-                <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+                <li><a href="#"><span class="lnr lnr-user"></span>{$new->getUser_name()}</a></li>
+                <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$new->getCreate_at()}</a></li>
+                <li><a href="#"><span class="lnr lnr-bubble"></span>{$n['view']}</a></li>
             </ul>
         </div>
     </div>
@@ -293,19 +292,19 @@ EOT;
            <div class="single-top-post">
            <div class="feature-image-thumb relative">
                <div class="overlay overlay-bg"></div>
-               <img class="img-fluid" src="{$p_assets}img/top-post2.jpg" alt="">
+               <img class="img-fluid" src="{$new->getFeatured_img()}" alt="">
            </div>
            <div class="top-post-details">
                <ul class="tags">
-                   <li><a href="#">Food Habit</a></li>
+                   <li><a href="#">{$new->getCate_name()}</a></li>
                </ul>
                <a href="image-post.html">
-                   <h4>A Discount Toner Cartridge Is Better Than Ever.</h4>
+                   <h4>{$new->getTitle()}</h4>
                </a>
                <ul class="meta">
-                   <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-                   <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-                   <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+                   <li><a href="#"><span class="lnr lnr-user"></span>{$new->getUser_name()}</a></li>
+                   <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$new->getCreate_at()}</a></li>
+                   <li><a href="#"><span class="lnr lnr-bubble"></span>{$n['view']}</a></li>
                </ul>
            </div>
        </div>
@@ -323,19 +322,19 @@ EOT;
             <div class="single-top-post mt-10">
             <div class="feature-image-thumb relative">
                 <div class="overlay overlay-bg"></div>
-                <img class="img-fluid" src="{$p_assets}img/top-post3.jpg" alt="">
+                <img class="img-fluid" src="{$new->getFeatured_img()}" alt="">
             </div>
             <div class="top-post-details">
                 <ul class="tags">
-                    <li><a href="#">Food Habit</a></li>
+                    <li><a href="#">{$new->getCate_name()}</a></li>
                 </ul>
                 <a href="image-post.html">
-                    <h4>A Discount Toner Cartridge Is Better</h4>
+                    <h4>{$new->getTitle()}</h4>
                 </a>
                 <ul class="meta">
-                    <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-                    <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+                    <li><a href="#"><span class="lnr lnr-user"></span>{$new->getUser_name()}</a></li>
+                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$new->getCreate_at()}</a></li>
+                    <li><a href="#"><span class="lnr lnr-bubble"></span>{$n['view']}</a></li>
                 </ul>
             </div>
         </div>
@@ -347,19 +346,24 @@ EOT;
 
 
     echo '</div>';
-
-    echo <<<EOT
+    $breakingnew = run_query('select * from tblnews where view = (select max(view) from tblnews)','');
+    
+    while($breakingnew==null){
+        $bn = $breakingnew['title'];
+        echo <<<EOT
                     
-                    <div class="col-lg-12">
-                        <div class="news-tracker-wrap">
-                            <h6><span>Breaking News:</span> <a href="#">Astronomy Binoculars A Great Alternative</a>
-                            </h6>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-lg-12">
+            <div class="news-tracker-wrap">
+                <h6><span>Breaking News:</span> <a href="#">{$bn}</a>
+                </h6>
             </div>
-        </section>
+        </div>
+    </div>
+</div>
+</section>
 EOT;
+    }
+    
 }
 
 function get_public_latestPost()
@@ -410,7 +414,7 @@ EOT;
                             </div>
 EOT;
         $i++;
-        if ($i == 5) break;
+        if ($i == 8) break;
     }
     echo "</div>";
 }
