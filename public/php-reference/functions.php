@@ -56,6 +56,7 @@ EOT;
 function get_public_header()
 {
     $category = run_query('select * from tblcategories', '');
+    $menus = run_query('select * from tblmenus order by sequence asc', '');
     $p_urls = public_urls();
     $p_assets = public_assets();
     $p_header = <<<EOT
@@ -79,26 +80,40 @@ function get_public_header()
             <div class="row align-items-center justify-content-between">
                 <nav id="nav-menu-container">
                     <ul class="nav-menu">
-                        <li class="menu-active"><a href="{$p_urls}">Home</a></li>
-                        <li class="menu-has-children"><a href="">Sports</a>
-                            <ul>
 EOT;
     echo $p_header;
-    $cate = '';
-    foreach ($category as $cat) {
-        $id = $cat['id'];
-      $cate = $cat['name'];  
-      
-        echo <<<EOT
-        <li><a href="{$p_urls}public/pages/category.php?id={$id}">{$cate}</a></li> 
+    foreach ($menus as $m) {
+        $name = $m['name'];
+        $is_sub = $m['isSub'];
+        $link = $m['link'];
+
+        if ($is_sub == 1) {
+            echo <<<EOT
+                        
+                        <li class="menu-has-children"><a href="{$p_urls}/index.php">{$name}</a>
+                            <ul>
 EOT;
+            $cate = '';
+            foreach ($category as $cat) {
+                $id = $cat['id'];
+                $cate = $cat['name'];
+
+                echo <<<EOT
+            <li><a href="{$p_urls}public/pages/category.php?id={$id}">{$cate}</a></li> 
+EOT;
+            }
+            echo "</ul>
+            </li>";
+        } else {
+            echo <<<EOT
+   
+            <li class="menu-active"><a href="{$link}">{$name}</a></li>
+        
+EOT;
+        }
     }
 
     echo "                                
-                        </ul>
-                        </li>
-                        <li><a href='{$p_urls}public/pages/about.php'>About</a></li>
-                        <li><a href='{$p_urls}public/pages/contact.php'>Contact</a></li>
                     </ul>
                 </nav><!-- #nav-menu-container -->
                 <div class='navbar-right'>
@@ -151,6 +166,80 @@ EOT;
     echo $p_footer;
 }
 
+class News
+{
+    private $title, $sh_desc, $featured_img, $create_at, $cate_name, $user_name;
+    public function __construct($title, $sh_desc, $featured_img, $create_at, $cate_name, $user_name)
+    {
+        $this->title = $title;
+        $this->sh_desc = $sh_desc;
+        $this->featured_img = $featured_img;
+        $this->create_at = $create_at;
+        $this->cate_name = $cate_name;
+        $this->user_name = $user_name;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function getSh_desc()
+    {
+        return $this->sh_desc;
+    }
+
+    public function setSh_desc($sh_desc)
+    {
+        $this->sh_desc = $sh_desc;
+    }
+
+    public function getFeatured_img()
+    {
+        return $this->featured_img;
+    }
+
+    public function setFeatured_img($featured_img)
+    {
+        $this->featured_img = $featured_img;
+    }
+
+    public function getCreate_at()
+    {
+        return $this->create_at;
+    }
+
+    public function setCreate_at($create_at)
+    {
+        $this->create_at = $create_at;
+    }
+
+    public function getCate_name()
+    {
+        return $this->cate_name;
+    }
+
+    public function setCate_name($cate_name)
+    {
+        $this->cate_name = $cate_name;
+    }
+
+    public function getUser_name()
+    {
+        return $this->user_name;
+    }
+
+    public function setUser_name($user_name)
+    {
+        $this->user_name = $user_name;
+    }
+}
+
 function get_public_topPostArea()
 {
     $p_urls = public_urls();
@@ -160,65 +249,107 @@ function get_public_topPostArea()
 		<section class="top-post-area pt-10">
             <div class="container no-padding">
                 <div class="row small-gutters">
-                    <div class="col-lg-8 top-post-left">
-                        <div class="feature-image-thumb relative">
-                            <div class="overlay overlay-bg"></div>
-                            <img class="img-fluid" src="{$p_assets}img/top-post1.jpg" alt="">
-                        </div>
-                        <div class="top-post-details">
-                            <ul class="tags">
-                                <li><a href="#">Food Habit</a></li>
-                            </ul>
-                            <a href="image-post.html">
-                                <h3>A Discount Toner Cartridge Is Better Than Ever.</h3>
-                            </a>
-                            <ul class="meta">
-                                <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-                                <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-                                <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 top-post-right">
-                        <div class="single-top-post">
-                            <div class="feature-image-thumb relative">
-                                <div class="overlay overlay-bg"></div>
-                                <img class="img-fluid" src="{$p_assets}img/top-post2.jpg" alt="">
-                            </div>
-                            <div class="top-post-details">
-                                <ul class="tags">
-                                    <li><a href="#">Food Habit</a></li>
-                                </ul>
-                                <a href="image-post.html">
-                                    <h4>A Discount Toner Cartridge Is Better Than Ever.</h4>
-                                </a>
-                                <ul class="meta">
-                                    <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-                                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-                                    <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="single-top-post mt-10">
-                            <div class="feature-image-thumb relative">
-                                <div class="overlay overlay-bg"></div>
-                                <img class="img-fluid" src="{$p_assets}img/top-post3.jpg" alt="">
-                            </div>
-                            <div class="top-post-details">
-                                <ul class="tags">
-                                    <li><a href="#">Food Habit</a></li>
-                                </ul>
-                                <a href="image-post.html">
-                                    <h4>A Discount Toner Cartridge Is Better</h4>
-                                </a>
-                                <ul class="meta">
-                                    <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-                                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-                                    <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+EOT;
+    echo $top_post_area;
+    $i = 0;
+    $news = run_query("select tblnews.title, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id ORDER BY tblnews.view DESC", "Error 404!");
+    foreach ($news as $n) {
+
+        $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
+        // echo $new[$i]->getTitle().'<br>'.$new[$i]->getCate_name().'<br>';
+        echo <<<EOT
+        <div class="col-lg-8 top-post-left">
+        <div class="feature-image-thumb relative">
+            <div class="overlay overlay-bg"></div>
+            <img class="img-fluid" src="{$p_assets}img/top-post1.jpg" alt="">
+        </div>
+        <div class="top-post-details">
+            <ul class="tags">
+                <li><a href="#">Food Habit</a></li>
+            </ul>
+            <a href="image-post.html">
+                <h3>A Discount Toner Cartridge Is Better Than Ever.</h3>
+            </a>
+            <ul class="meta">
+                <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
+                <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
+                <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+            </ul>
+        </div>
+    </div>
+EOT;
+        $i++;
+        if ($i == 1) break;
+    }
+    echo <<<EOT
+<div class="col-lg-4 top-post-right">
+EOT;
+    foreach ($news as $n) {
+
+        $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
+        $i++;
+        if ($i == 2) {
+            echo <<<EOT
+           <div class="single-top-post">
+           <div class="feature-image-thumb relative">
+               <div class="overlay overlay-bg"></div>
+               <img class="img-fluid" src="{$p_assets}img/top-post2.jpg" alt="">
+           </div>
+           <div class="top-post-details">
+               <ul class="tags">
+                   <li><a href="#">Food Habit</a></li>
+               </ul>
+               <a href="image-post.html">
+                   <h4>A Discount Toner Cartridge Is Better Than Ever.</h4>
+               </a>
+               <ul class="meta">
+                   <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
+                   <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
+                   <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+               </ul>
+           </div>
+       </div>
+EOT;
+            break;
+        }
+    }
+
+    foreach ($news as $n) {
+
+        $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
+        $i++;
+        if ($i == 3) {
+            echo <<<EOT
+            <div class="single-top-post mt-10">
+            <div class="feature-image-thumb relative">
+                <div class="overlay overlay-bg"></div>
+                <img class="img-fluid" src="{$p_assets}img/top-post3.jpg" alt="">
+            </div>
+            <div class="top-post-details">
+                <ul class="tags">
+                    <li><a href="#">Food Habit</a></li>
+                </ul>
+                <a href="image-post.html">
+                    <h4>A Discount Toner Cartridge Is Better</h4>
+                </a>
+                <ul class="meta">
+                    <li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
+                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
+                    <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+                </ul>
+            </div>
+        </div>
+EOT;
+
+            break;
+        }
+    }
+
+
+    echo '</div>';
+
+    echo <<<EOT
+                    
                     <div class="col-lg-12">
                         <div class="news-tracker-wrap">
                             <h6><span>Breaking News:</span> <a href="#">Astronomy Binoculars A Great Alternative</a>
@@ -229,12 +360,11 @@ function get_public_topPostArea()
             </div>
         </section>
 EOT;
-    echo $top_post_area;
 }
 
 function get_public_latestPost()
 {
-    $news = run_query("select tblnews.title, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id", "Error 404!");
+    $news = run_query("select tblnews.title, tblnews.view, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id order by tblnews.create_at desc", "Error 404!");
     $p_urls = public_urls();
     $p_assets = public_assets();
     $latest_post = <<<EOT
@@ -251,6 +381,7 @@ EOT;
         $user = $n['username'];
         $category = $n['name'];
         $date = $n['create_at'];
+        $view = $n['view'];
         echo <<<EOT
     <div class="single-latest-post row align-items-center">
                                 <div class="col-lg-5 post-left">
@@ -270,7 +401,7 @@ EOT;
                                         <li><a href="#"><span class="lnr lnr-user"></span>{$user}</a></li>
                                         <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$date}</a>
                                         </li>
-                                        <li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
+                                        <li><a href="#"><span class="lnr lnr-bubble"></span>{$view}</a></li>
                                     </ul>
                                     <p class="excert">
                                         {$sh_desc}
@@ -282,9 +413,39 @@ EOT;
         if ($i == 5) break;
     }
     echo "</div>";
-    // foreach ($news as $ns) {
-    //     echo $n['tblnews.title'] . '<br>';
-    //     echo substr($n['tblnews.short_descript'], 0, 300) . '<br>';
-    //     echo $n['tbluser.username'] . '<br>';
-    // }
+}
+
+function get_public_rightSitePopular()
+{
+    $news = run_query("select tblnews.title, tblnews.view, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id order by tblnews.view desc", "Error 404!");
+    $p_urls = public_urls();
+    $p_assets = public_assets();
+    $i = 0;
+    foreach ($news as $n) {
+        $title =  $n['title'];
+        $view = $n['view'];
+        $sh_desc =  substr($n['short_descript'], 0, 300);
+        $featured_img = $n['featured_image'];
+        $user = $n['username'];
+        $category = $n['name'];
+        $date = $n['create_at'];
+        echo <<<EOT
+        <div class="single-list flex-row d-flex">
+        <div class="thumb">
+            <img class="img-thumbnail img-fluid" style = "max-width: 100px;" src="{$featured_img}" alt="">
+        </div>
+        <div class="details">
+            <a href="image-post.html">
+                <h6>{$title}</h6>
+            </a>
+            <ul class="meta">
+                <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$date}</a></li>
+                <li><a href="#"><span class="lnr lnr-bubble"></span>{$view}</a></li>
+            </ul>
+        </div>
+    </div>
+EOT;
+        $i++;
+        if ($i == 4) break;
+    }
 }
