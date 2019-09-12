@@ -7,7 +7,20 @@ include '../../resource/db-functions/transaction-db.php';
 <?php include '../template/p-header.php'; ?>
 
 <?php 
-	run_query('',''); 
+	$id = $_GET['id'];
+	echo $id;
+	$result = run_query("select tblnews.title,tblnews.view, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id where tblcategories.id = {$id} ORDER BY tblnews.view DESC",''); 
+	foreach ($news as $n) {
+        $title =  $n['title'];
+        $sh_desc =  substr($n['short_descript'], 0, 300);
+        $featured_img = $n['featured_image'];
+        $user = $n['username'];
+        $category = $n['name'];
+        $date = $n['create_at'];
+		$view = $n['view'];
+		echo $category;
+	}
+
 ?>
 
 
@@ -18,7 +31,7 @@ include '../../resource/db-functions/transaction-db.php';
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="hero-nav-area">
-						<h1 class="text-white">Posts Category</h1>
+						<h1 class="text-white">Posts </h1>
 						<p class="text-white link-nav"><a href="index.html">Home </a> <span class="lnr lnr-arrow-right"></span><a href="category.html">Posts Category</a></p>
 					</div>
 				</div>

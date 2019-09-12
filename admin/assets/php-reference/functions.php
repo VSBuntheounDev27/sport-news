@@ -248,6 +248,48 @@ function get_sideBar(){
         </li>
         <li class="treeview">
           <a href="#">
+            <i class="fa fa-list"></i>
+            <span>Company</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{$url}/pages/posts/add-post/add-posts.php"><i class="fa fa-arrow-right"></i> Add Posts</a></li>
+            <li><a href="{$url}/pages/posts/manage-post/manage-posts.php"><i class="fa fa-arrow-right"></i> Manage Posts</a></li>
+            <li><a href="{$url}/pages/posts/trash-post/trash-posts.php"><i class="fa fa-arrow-right"></i> Trash</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-list"></i>
+            <span>Partner</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{$url}/pages/posts/add-post/add-posts.php"><i class="fa fa-arrow-right"></i> Add Posts</a></li>
+            <li><a href="{$url}/pages/posts/manage-post/manage-posts.php"><i class="fa fa-arrow-right"></i> Manage Posts</a></li>
+            <li><a href="{$url}/pages/posts/trash-post/trash-posts.php"><i class="fa fa-arrow-right"></i> Trash</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-list"></i>
+            <span>Menu</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{$url}/pages/posts/add-post/add-posts.php"><i class="fa fa-arrow-right"></i> Add Posts</a></li>
+            <li><a href="{$url}/pages/posts/manage-post/manage-posts.php"><i class="fa fa-arrow-right"></i> Manage Posts</a></li>
+            <li><a href="{$url}/pages/posts/trash-post/trash-posts.php"><i class="fa fa-arrow-right"></i> Trash</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
             <i class="fa fa-key"></i>
             <span>Security</span>
             <span class="pull-right-container">
