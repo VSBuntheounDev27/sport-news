@@ -90,7 +90,7 @@ EOT;
         if ($is_sub == 1) {
             echo <<<EOT
                         
-                        <li class="menu-has-children"><a href="{$p_urls}/index.php">{$name}</a>
+                        <li class="menu-has-children"><a href="{$p_urls}index.php">{$name}</a>
                             <ul>
 EOT;
             $cate = '';
@@ -242,6 +242,8 @@ class News
 
 function get_public_topPostArea()
 {
+    $i = 0;
+    $news = run_query("select tblnews.title,tblnews.view, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id ORDER BY tblnews.view DESC", "Error 404!");
     $p_urls = public_urls();
     $p_assets = public_assets();
     $top_post_area = <<<EOT
@@ -251,13 +253,11 @@ function get_public_topPostArea()
                 <div class="row small-gutters">
 EOT;
     echo $top_post_area;
-    $i = 0;
-    $news = run_query("select tblnews.title,tblnews.view, tblnews.short_descript, tblnews.featured_image, tblnews.create_at, tblcategories.name, tbluser.username from tblcategories INNER JOIN tblnews ON tblcategories.id = tblnews.category_id  inner join tbluser on tblnews.user_id = tbluser.id ORDER BY tblnews.view DESC", "Error 404!");
     foreach ($news as $n) {
 
         $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
         echo <<<EOT
-        <div class="col-lg-8 top-post-left">
+        <div class="col-lg-12 top-post-left">
         <div class="feature-image-thumb relative">
             <div class="overlay overlay-bg"></div>
             <img class="img-fluid" src="{$new->getFeatured_img()}" alt="">
@@ -280,71 +280,6 @@ EOT;
         $i++;
         if ($i == 1) break;
     }
-    echo <<<EOT
-<div class="col-lg-4 top-post-right">
-EOT;
-    foreach ($news as $n) {
-
-        $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
-        $i++;
-        if ($i == 2) {
-            echo <<<EOT
-           <div class="single-top-post">
-           <div class="feature-image-thumb relative">
-               <div class="overlay overlay-bg"></div>
-               <img class="img-fluid" src="{$new->getFeatured_img()}" alt="">
-           </div>
-           <div class="top-post-details">
-               <ul class="tags">
-                   <li><a href="#">{$new->getCate_name()}</a></li>
-               </ul>
-               <a href="image-post.html">
-                   <h4>{$new->getTitle()}</h4>
-               </a>
-               <ul class="meta">
-                   <li><a href="#"><span class="lnr lnr-user"></span>{$new->getUser_name()}</a></li>
-                   <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$new->getCreate_at()}</a></li>
-                   <li><a href="#"><span class="lnr lnr-bubble"></span>{$n['view']}</a></li>
-               </ul>
-           </div>
-       </div>
-EOT;
-            break;
-        }
-    }
-
-    foreach ($news as $n) {
-
-        $new = new News($n['title'], substr($n['short_descript'], 0, 300), $n['featured_image'], $n['create_at'], $n['name'], $n['username']);
-        $i++;
-        if ($i == 3) {
-            echo <<<EOT
-            <div class="single-top-post mt-10">
-            <div class="feature-image-thumb relative">
-                <div class="overlay overlay-bg"></div>
-                <img class="img-fluid" src="{$new->getFeatured_img()}" alt="">
-            </div>
-            <div class="top-post-details">
-                <ul class="tags">
-                    <li><a href="#">{$new->getCate_name()}</a></li>
-                </ul>
-                <a href="image-post.html">
-                    <h4>{$new->getTitle()}</h4>
-                </a>
-                <ul class="meta">
-                    <li><a href="#"><span class="lnr lnr-user"></span>{$new->getUser_name()}</a></li>
-                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>{$new->getCreate_at()}</a></li>
-                    <li><a href="#"><span class="lnr lnr-bubble"></span>{$n['view']}</a></li>
-                </ul>
-            </div>
-        </div>
-EOT;
-
-            break;
-        }
-    }
-
-
     echo '</div>';
     $breakingnew = run_query('select * from tblnews where view = (select max(view) from tblnews)','');
     

@@ -2,12 +2,13 @@
 include '../../config.php';
 include '../../public/php-reference/functions.php';
 include '../../resource/db-functions/transaction-db.php';
-
+include 'function.php';
 ?>
 <?php include '../template/p-header.php'; ?>
 
 <?php 
-	run_query('',''); 
+$cat_id = $_GET['id'];
+	$result = run_query("select * from tblcategories where id= {$cat_id}",''); 
 ?>
 
 
@@ -18,7 +19,7 @@ include '../../resource/db-functions/transaction-db.php';
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="hero-nav-area">
-						<h1 class="text-white">Posts Category</h1>
+						<h1 class="text-white">Posts <?php foreach($result as $re){ echo $re['name']; }?></h1>
 						<p class="text-white link-nav"><a href="index.html">Home </a> <span class="lnr lnr-arrow-right"></span><a href="category.html">Posts Category</a></p>
 					</div>
 				</div>
@@ -39,31 +40,7 @@ include '../../resource/db-functions/transaction-db.php';
 					<!-- Start latest-post Area -->
 					<div class="latest-post-wrap">
 						<h4 class="cat-title">Latest News</h4>
-						<div class="single-latest-post row align-items-center">
-							<div class="col-lg-5 post-left">
-								<div class="feature-img relative">
-									<div class="overlay overlay-bg"></div>
-									<img class="img-fluid" src="img/l1.jpg" alt="">
-								</div>
-								<ul class="tags">
-									<li><a href="#">Lifestyle</a></li>
-								</ul>
-							</div>
-							<div class="col-lg-7 post-right">
-								<a href="image-post.html">
-									<h4>A Discount Toner Cartridge Is
-										Better Than Ever.</h4>
-								</a>
-								<ul class="meta">
-									<li><a href="#"><span class="lnr lnr-user"></span>Mark wiens</a></li>
-									<li><a href="#"><span class="lnr lnr-calendar-full"></span>03 April, 2018</a></li>
-									<li><a href="#"><span class="lnr lnr-bubble"></span>06 Comments</a></li>
-								</ul>
-								<p class="excert">
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
-								</p>
-							</div>
-						</div>
+						<?php get_public_cateLatestPost(); ?>
 						<div class="load-more">
 							<a href="#" class="primary-btn">Load More Posts</a>
 						</div>
